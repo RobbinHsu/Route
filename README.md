@@ -7,14 +7,16 @@
     * Model class: Book
     * Controller name: BooksController
     * Data context class: 選擇 + 號：BookSampleContext  
-* 如果使用空白專案，要在Startup.cs新增
+* 如果使用空白專案，要在Startup.cs新增  
+    ```csharp  
+        public IConfiguration Configuration { get; }
+    
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        
+* 開啟 **Package Manager Console**，輸入以下指令：  
     ```csharp
-    public IConfiguration Configuration { get; }
-
-    public Startup(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
+    PM> Add-Migration initial
     ```
-
-
