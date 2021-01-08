@@ -10,7 +10,8 @@ using AttributeRouting.Model;
 
 namespace AttributeRouting
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("books")]
     [ApiController]
     public class BooksController : ControllerBase
     {
@@ -21,15 +22,19 @@ namespace AttributeRouting
             _context = context;
         }
 
-        // GET: api/Books
+        // GET: Books
         [HttpGet]
+        [Route("")]
         public async Task<ActionResult<IEnumerable<Book>>> GetBook()
         {
             return await _context.Book.ToListAsync();
         }
 
         // GET: api/Books/5
-        [HttpGet("{id}")]
+        //[HttpGet("{id}")]
+        // GET: /Books/5
+        [HttpGet]
+        [Route("{id:int}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
             var book = await _context.Book.FindAsync(id);
@@ -40,6 +45,20 @@ namespace AttributeRouting
             }
 
             return book;
+        }
+
+        // 使用Router才能支援 RESTful API 中常見的某些 URI 模式
+        // 查詢特定 Author
+        // GET: authors/{authorId}/books
+        [HttpGet]
+        [Route("~/authors/{authorId:int}/books")]
+        public IActionResult GetBooksByAuthor(int authorId)
+        {
+            var author = _context.Book
+                .Include(b => b.Author)
+                .Where(b => b.AuthorId == authorId);
+
+            return Ok(author);
         }
 
         // PUT: api/Books/5
@@ -83,7 +102,7 @@ namespace AttributeRouting
             _context.Book.Add(book);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBook", new { id = book.BookId }, book);
+            return CreatedAtAction("GetBook", new {id = book.BookId}, book);
         }
 
         // DELETE: api/Books/5
