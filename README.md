@@ -72,6 +72,33 @@ public class BooksController : ApiController
         }
     });
     ```  
+* 建立 Middleware 類別  
+    把自製的 Middleware 邏輯獨立出來。
+    自製的Middleware中要有一個非同步的 Invoke 方法。
+    ```cs
+    public class SampleMiddleware
+    {
+        private readonly RequestDelegate _next;
+    
+        public SampleMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
+    
+        public async Task Invoke(HttpContext context)
+        {
+            var userAgent = context.Request.Headers["User-Agent"].ToString();
+            if (userAgent.Contains("Postman"))
+            {
+                await _next(context);
+            }
+            else
+            {
+                await context.Response.WriteAsync("Error");
+            }
+        }
+    }
+    ```  
     
 - - -
 參考資料：   
@@ -79,6 +106,7 @@ public class BooksController : ApiController
 <a href="https://docs.microsoft.com/zh-tw/aspnet/web-api/overview/web-api-routing-and-actions/routing-in-aspnet-web-api" target="_blank">ASP.NET Web API 中的路由</a>  
 <a href="https://docs.microsoft.com/zh-tw/aspnet/web-api/overview/web-api-routing-and-actions/routing-and-action-selection" target="_blank">ASP.NET Web API 中的路由和動作選取</a>  
 <a href="https://docs.microsoft.com/zh-tw/aspnet/web-api/overview/web-api-routing-and-actions/attribute-routing-in-web-api-2" target="_blank">ASP.NET Web API 2 中的屬性路由</a>
+<a href="https://blog.johnwu.cc/article/ironman-day03-asp-net-core-middleware.html" target="_blank">[鐵人賽 Day03] ASP.NET Core 2 系列 - Middleware</a>
 - - -
 * 如果使用空白專案，要在Startup.cs新增
     * Configuration  

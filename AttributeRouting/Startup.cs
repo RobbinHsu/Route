@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using AttributeRouting.Data;
@@ -46,18 +44,7 @@ namespace AttributeRouting
 
             app.UseRouting();
 
-            app.Use((context, next) =>
-            {
-                var userAgent = context.Request.Headers["User-Agent"].ToString();
-                if (userAgent.Contains("Postman"))
-                {
-                    return next();
-                }
-                else
-                {
-                    return context.Response.WriteAsync("Error");
-                }
-            });
+            app.UseMiddleware<BrowserMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
