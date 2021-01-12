@@ -73,7 +73,7 @@ public class BooksController : ApiController
     });
     ```  
 * 建立 Middleware 類別  
-    把自製的 Middleware 邏輯獨立出來。
+    * 把自製的 Middleware 邏輯獨立出來。
     自製的Middleware中要有一個非同步的 Invoke 方法。
     ```cs
     public class SampleMiddleware
@@ -99,6 +99,11 @@ public class BooksController : ApiController
         }
     }
     ```  
+* 註冊到Startup的Configure
+    ```cs
+    app.UseMiddleware<BrowserMiddleware>();
+    ```  
+    
     
 - - -
 參考資料：   
