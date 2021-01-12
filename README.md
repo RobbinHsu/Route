@@ -24,14 +24,14 @@ public class BooksController : ControllerBase
     // GET: authors/{authorId}/books
     [HttpGet]
     [Route("~/authors/{authorId:int}/books")]
-    public IActionResult GetBooksByAuthor(int authorId)
-    {
-        var author = _context.Book
-                            .Include(b => b.Author)
-                            .Where(b => b.AuthorId == authorId);
+    public IActionResult GetBooksByAuthor(int authorId) { ... }
     
-        return Ok(author);
-    }
+    // GET: /books/date/2016-06-27
+    [HttpGet]
+    //[Route(@"date/{publishDate:datetime}")]
+    //[Route("date/{publishDate:datetime:regex(\d{{4}}-\d{{2}}-\d{{2}})}")]
+    [Route(@"date/{publishDate:datetime:regex(\d{{4}}-\d{{2}}-\d{{2}})}")]
+    public IActionResult Get(DateTime publishdate) { ... }
 }
 ```
 
@@ -55,8 +55,11 @@ public class BooksController : ApiController
 ```
 
 - - -
-參考資料：
-<a href="https://docs.microsoft.com/zh-tw/aspnet/web-api/overview/web-api-routing-and-actions/routing-in-aspnet-web-api" target="_blank">ASP.NET Web API 中的路由</a>
+參考資料：   
+**精準解析 ASP.NET Core Web API**  
+<a href="https://docs.microsoft.com/zh-tw/aspnet/web-api/overview/web-api-routing-and-actions/routing-in-aspnet-web-api" target="_blank">ASP.NET Web API 中的路由</a>  
+<a href="https://docs.microsoft.com/zh-tw/aspnet/web-api/overview/web-api-routing-and-actions/routing-and-action-selection" target="_blank">ASP.NET Web API 中的路由和動作選取</a>  
+<a href="https://docs.microsoft.com/zh-tw/aspnet/web-api/overview/web-api-routing-and-actions/attribute-routing-in-web-api-2" target="_blank">ASP.NET Web API 2 中的屬性路由</a>
 - - -
 * 如果使用空白專案，要在Startup.cs新增
     * Configuration  

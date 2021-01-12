@@ -105,6 +105,19 @@ namespace AttributeRouting
             return CreatedAtAction("GetBook", new {id = book.BookId}, book);
         }
 
+        [HttpGet]
+        //[Route(@"date/{publishDate:datetime}")]
+        //[Route("date/{publishDate:datetime:regex(\d{{4}}-\d{{2}}-\d{{2}})}")]
+        [Route(@"date/{publishDate:datetime:regex(\d{{4}}-\d{{2}}-\d{{2}})}")]
+        public IActionResult Get(DateTime publishDate)
+        {
+            var books = _context.Book
+                .Include(b => b.Author)
+                .Where(b => b.PublishDate == publishDate);
+
+            return Ok(books);
+        }
+
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Book>> DeleteBook(int id)
