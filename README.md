@@ -28,7 +28,7 @@ public class BooksController : ControllerBase
     
     // GET: /books/date/2016-06-27
     [HttpGet]
-    //[Route(@"date/{publishDate:datetime}")]
+    //[Route("date/{publishDate:datetime}")]
     //[Route("date/{publishDate:datetime:regex(\d{{4}}-\d{{2}}-\d{{2}})}")]
     [Route(@"date/{publishDate:datetime:regex(\d{{4}}-\d{{2}}-\d{{2}})}")]
     public IActionResult Get(DateTime publishdate) { ... }
@@ -53,7 +53,26 @@ public class BooksController : ApiController
     public HttpResponseMessage Post(Book book) { ... }
 }
 ```
+- - -
+## Map動詞()
 
+* 判斷請求來源的資訊(例如瀏覽器)  
+    ```cs
+    app.Use((context, next) =>
+    {
+        var userAgent = context.Request.Headers["User-Agent"].ToString();
+        //只允許Postman通過
+        if (userAgent.Contains("Postman"))
+        {
+         return next();
+        }
+        else
+        {
+         return context.Response.WriteAsync("Error");
+        }
+    });
+    ```  
+    
 - - -
 參考資料：   
 **精準解析 ASP.NET Core Web API**  

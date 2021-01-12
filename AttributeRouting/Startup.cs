@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using AttributeRouting.Data;
+using System.Web;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AttributeRouting
 {
@@ -29,7 +31,7 @@ namespace AttributeRouting
         {
             services.AddControllers();
             services.AddDbContext<BookSampleContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BookSampleContext")));
+                options.UseSqlServer(Configuration.GetConnectionString("BookSampleContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,14 +41,31 @@ namespace AttributeRouting
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.Use((context, next) =>
+            {
+                var userAgent = context.Request.Headers["User-Agent"].ToString();
+                if (userAgent.Contains("Postman"))
+                {
+                    return next();
+                }
+                else
+                {
+                    return context.Response.WriteAsync("Error");
+                }
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapGet("/", async context => { await context.Response.WriteAsync("Hello World!"); });
+                endpoints.MapGet("/", async context 
+                    => { 
+                        await context.Response.WriteAsync("Hello World!"); 
+                    });
             });
         }
     }
